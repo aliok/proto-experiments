@@ -1,0 +1,24 @@
+syntax = 'proto3';
+
+option go_package = "contract2";
+
+
+// CloudEvent content mode
+enum ContentMode {
+  BINARY = 0;
+  STRUCTURED = 1;
+}
+
+message Ingress {
+  // Optional content mode to use when pushing messages to Kafka
+  ContentMode contentMode = 1;
+
+  // Ingress can both listen on a specific HTTP path
+  // or listen to the / path but match the Host header
+
+  // path to listen for incoming events.
+  string path = 2;
+
+  // host header to match
+  string host = 3;
+}
