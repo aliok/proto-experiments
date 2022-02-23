@@ -2,27 +2,42 @@ package main
 
 import (
 	"github.com/aliok/proto-experiments/contract1"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"log"
 	"os"
 )
 
 func main() {
-	org := &contract1.Ingress{
+	message := &contract1.Ingress{
 		ContentMode: contract1.ContentMode_BINARY,
 		IngressType: &contract1.Ingress_Path{Path: "/foo/bar"},
 	}
 
-	data, err := proto.Marshal(org)
+	bindata, err := proto.Marshal(message)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	file, err := os.Create("msg.bin")
+	jsondata, err := protojson.Marshal(message)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	if _, err := file.Write(data); err != nil {
+
+	binfile, err := os.Create("msg.bin")
+	if err != nil {
 		log.Fatalln(err)
 	}
+	if _, err := binfile.Write(bindata); err != nil {
+		log.Fatalln(err)
+	}
+
+	jsonfile, err := os.Create("msg.json")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	if _, err := jsonfile.Write(jsondata); err != nil {
+		log.Fatalln(err)
+	}
+
 }
